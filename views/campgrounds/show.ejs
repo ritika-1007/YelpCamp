@@ -2,7 +2,9 @@
     <link rel="stylesheet" href="/stylesheets/star.css">
 
     <div class="row">
+
         <div class="col-6">
+
             <div id="carouselExample" class="carousel slide">
                 <div class="carousel-inner">
                     <% campground.images.forEach((img,i)=>{%>
@@ -57,6 +59,7 @@
         </div>
 
         <div class="col-6">
+            <div class="mb-3" id='map'></div>
             <%if(!currentUser){%>
                 <h2>Reviews</h2>
                 <%}%>
@@ -134,3 +137,12 @@
 
     </div>
     <a href="/campgrounds">All Campgrounds</a>
+
+    <script>
+        const mapToken = '<%-process.env.MAPBOX_TOKEN%>'
+        const campground = '<%-JSON.stringify(campground)%>'
+    </script>
+
+    <script src="/javascript/showMap.js">
+
+    </script>

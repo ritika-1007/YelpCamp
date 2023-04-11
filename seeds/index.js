@@ -14,13 +14,18 @@ const sample = array => {
 }
 const seedDB = async () => {
     await Campground.deleteMany({});
-    for (i = 0; i < 50; i++) {
+    for (i = 0; i < 500; i++) {
         const random1000 = Math.floor(Math.random() * 1000);
         const price = Math.floor(Math.random() * 20) + 10;
         const camp = new Campground({
             author: "642c9bbdb129f2c3053c87a8",
             location: `${cities[random1000].city},${cities[random1000].state}`,
             title: `${sample(descriptors)} ${sample(places)}`,
+            geometry: {
+                type: 'Point', coordinates: [
+                    cities[random1000].longitude, cities[random1000].latitude
+                ]
+            },
             images: [
                 {
                     url: 'https://res.cloudinary.com/dcmqbtd3z/image/upload/v1680968612/YelpCamp/ogp1eowmkgum94bugm5l.jpg',

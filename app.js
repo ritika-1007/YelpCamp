@@ -23,7 +23,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 
 // const dbUrl = process.env.DB_URL;
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
+const dbUrl = 'mongodb://localhost:27017/yelp-camp';
 main().catch(err => {
     console.log(err)
 });
@@ -35,8 +35,10 @@ const secret = process.env.SECRET || 'thisisasecret';
 const store = new MongoStore({
     mongoUrl: dbUrl,
     secret: secret,
-    touchAfter: 24 * 3600
+    touchAfter: 24 * 3600,
 });
+
+
 store.on('error', function (e) {
     console.log("Session Store Error", e)
 });

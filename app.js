@@ -14,27 +14,44 @@ const campgroundRoutes = require('./routes/campground');
 const reviewRoutes = require('./routes/review');
 const userRoutes = require('./routes/users');
 const session = require("express-session");
+const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
+
+// const dbUrl = process.env.DB_URL;
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
+main().catch(err => {
+    console.log(err)
+});
+async function main() {
+    await mongoose.connect(dbUrl);
+    console.log("Connection open");
+}
+const secret = process.env.SECRET || 'thisisasecret';
+const store = new MongoStore({
+    mongoUrl: dbUrl,
+    secret: secret,
+    touchAfter: 24 * 3600
+});
+store.on('error', function (e) {
+    console.log("Session Store Error", e)
+});
+
 const sessionConfig = {
-    secret: "thisisasecret", resave: false, saveUninitialized: false,
+    store,
+    secret,
+    resave: false,
+    saveUninitialized: false,
     cookie: {
         name: 'session',
         httpOnly: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
-}
-main().catch(err => {
-    console.log(err)
-});
-async function main() {
-    await mongoose.connect('mongodb://localhost:27017/yelp-camp');
-    console.log("Connection open");
 }
 
 app.engine('ejs', ejsMate);
